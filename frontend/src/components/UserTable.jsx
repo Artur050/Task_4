@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers, blockUser, deleteUser, unblockUser } from '../features/userSlice';
 import axios from 'axios';
 import Logout from './Logout';
+import { getApiUrl } from '../utils/apiUtils';
 
 const UserTable = () => {
   const dispatch = useDispatch();
@@ -21,23 +22,24 @@ const UserTable = () => {
     }
   };
 
+
   const handleBlockUsers = async () => {
     selectedUsers.forEach(async (userId) => {
-      await axios.put(`http://localhost:5000/api/users/block/${userId}`);
+      await axios.put(getApiUrl(`/users/block/${userId}`));
       dispatch(blockUser(userId));
     });
   };
 
   const handleUnblockUsers = async () => {
     selectedUsers.forEach(async (userId) => {
-      await axios.put(`http://localhost:5000/api/users/unblock/${userId}`);
+      await axios.put(getApiUrl(`/users/unblock/${userId}`));
       dispatch(unblockUser(userId));
     });
   };
 
   const handleDeleteUsers = async () => {
     selectedUsers.forEach(async (userId) => {
-      await axios.delete(`http://localhost:5000/api/users/delete/${userId}`);
+      await axios.delete(getApiUrl(`/users/delete/${userId}`));
       dispatch(deleteUser(userId));
     });
   };

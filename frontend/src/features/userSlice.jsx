@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { getApiUrl } from '../utils/apiUtils';
 
 export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
-  const response = await axios.get('http://localhost:5000/api/users');
+  const response = await axios.get(getApiUrl('/users'));
   return response.data;
 });
 

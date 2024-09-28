@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getApiUrl } from '../utils/apiUtils';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+      const response = await axios.post(getApiUrl('/auth/login'), { email, password });
       localStorage.setItem('username', response.data.user.name);     
       localStorage.setItem('token', response.data.token);
 

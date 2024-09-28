@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../utils/apiUtils';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -10,7 +11,7 @@ const Register = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', { name, email, password });
+      await axios.post(getApiUrl('/auth/register'), { name, email, password });
       alert('Registration successful! You can now login.');
     } catch (err) {
       setError('Registration failed. Please try again.');
