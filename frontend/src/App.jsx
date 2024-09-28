@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Home from './components/Home';
 import './App.css'
+import { Link } from 'react-router-dom';
 
 function App() {
 
@@ -16,11 +17,11 @@ function App() {
         <div className="App">
           <nav className="p-4 bg-gray-800 text-white flex justify-between">
             <div>
-              <a href="/login" className="mr-4">Login</a>
-              <a href="/register" className="mr-4">Register</a>
+              <Link to="/login" className="mr-4">Login</Link>
+              <Link to="/register" className="mr-4">Register</Link>
             </div>
             <div>
-              <a href="/users">Users</a>
+              <Link to="/users">Users</Link>
             </div>
           </nav>
           <Routes>
