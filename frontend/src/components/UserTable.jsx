@@ -53,17 +53,18 @@ const UserTable = () => {
 
   const handleDeleteUsers = async () => {
     try {
-      selectedUsers.forEach(async (userId) => {
-        await axios.delete(getApiUrl(`/delete/${userId}`));
+      for (const userId of selectedUsers) {
+        await axios.delete(getApiUrl(`/users/delete/${userId}`));
+  
         dispatch(deleteUser(userId));
-    
+      
         const blockedUser = users.find(user => user._id === userId);
         if (blockedUser && blockedUser.email === currentUserEmail) {
           localStorage.removeItem('token');
           localStorage.removeItem('email');
           navigate('/register');
         }
-      });
+      }
     } catch (error) {
       console.error("Error deleting users:", error);
     }
