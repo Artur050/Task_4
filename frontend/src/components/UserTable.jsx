@@ -12,7 +12,7 @@ const UserTable = () => {
   const { users, status, error } = useSelector((state) => state.users);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const user = localStorage.getItem('username');
-  const currentUserId = localStorage.getItem('userId');
+  const currentUserEmail = localStorage.getItem('email');
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -29,16 +29,16 @@ const UserTable = () => {
 
   const handleBlockUsers = async () => {
     try {
-      for (const userId of selectedUsers) {
+      selectedUsers.forEach(async (userId) => {
         await axios.put(getApiUrl(`/users/block/${userId}`));
         dispatch(blockUser(userId));
-
-        if (userId === currentUserId) {
+    
+        const blockedUser = users.find(user => user._id === userId);
+        if (blockedUser && blockedUser.email === currentUserEmail) {
           localStorage.removeItem('token');
           navigate('/login');
-          break;
         }
-      }
+      });
     } catch (error) {
       console.error("Error blocking users:", error);
     }
@@ -53,16 +53,17 @@ const UserTable = () => {
 
   const handleDeleteUsers = async () => {
     try {
-      for (const userId of selectedUsers) {
-        await axios.delete(getApiUrl(`/users/delete/${userId}`));
-        dispatch(deleteUser(userId));
-
-        if (userId === currentUserId) {
+      selectedUsers.forEach(async (userId) => {
+        await axios.put(getApiUrl(`/users/block/${userId}`));
+        dispatch(blockUser(userId));
+    
+        const blockedUser = users.find(user => user._id === userId);
+        if (blockedUser && blockedUser.email === currentUserEmail) {
           localStorage.removeItem('token');
+          localStorage.removeItem('email');
           navigate('/register');
-          break;
         }
-      }
+      });
     } catch (error) {
       console.error("Error deleting users:", error);
     }
