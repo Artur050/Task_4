@@ -16,6 +16,10 @@ connect(uri, {
   // useUnifiedTopology: true
 });
 
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 
