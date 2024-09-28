@@ -29,7 +29,10 @@ router.post('/login', async (req, res) => {
   if (!validPassword) return res.status(400).json({ message: 'Invalid password' });
 
   const token = sign({ id: user._id, email: user.email }, 'SECRET_KEY', { expiresIn: '1h' });
-  res.json({ token, user: {name: user.name} });
+  res.json({ token, user: {
+    name: user.name,
+    email: user.email
+  } });
 });
 
 export default router;

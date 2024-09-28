@@ -13,7 +13,8 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(getApiUrl('/auth/login'), { email, password });
-      localStorage.setItem('email', response.data.user.email);     
+      localStorage.setItem('username', response.data.user.name);
+      localStorage.setItem('email', response.data.user.email);          
       localStorage.setItem('token', response.data.token);
 
       navigate('/users');
