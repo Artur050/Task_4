@@ -54,8 +54,8 @@ const UserTable = () => {
   const handleDeleteUsers = async () => {
     try {
       selectedUsers.forEach(async (userId) => {
-        await axios.put(getApiUrl(`/users/block/${userId}`));
-        dispatch(blockUser(userId));
+        await axios.put(getApiUrl(`/users/delete/${userId}`));
+        dispatch(deleteUser(userId));
     
         const blockedUser = users.find(user => user._id === userId);
         if (blockedUser && blockedUser.email === currentUserEmail) {
