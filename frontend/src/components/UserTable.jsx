@@ -4,16 +4,20 @@ import { fetchUsers, blockUser, deleteUser, unblockUser } from '../features/user
 import axios from 'axios';
 import Logout from './Logout';
 import { getApiUrl } from '../utils/apiUtils';
+import { useNavigate } from 'react-router-dom';
 
 const UserTable = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { users, status, error } = useSelector((state) => state.users);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const user = localStorage.getItem('username');
+  const currentUserId = localStorage.getItem('userId');
 
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
+
   const handleSelectAll = () => {
     if (selectedUsers.length === users.length) {
       setSelectedUsers([]);
@@ -24,10 +28,20 @@ const UserTable = () => {
 
 
   const handleBlockUsers = async () => {
-    selectedUsers.forEach(async (userId) => {
-      await axios.put(getApiUrl(`/users/block/${userId}`));
-      dispatch(blockUser(userId));
-    });
+    try {
+      for (const userId of selectedUsers) {
+        await axios.put(getApiUrl(`/users/block/${userId}`));
+        dispatch(blockUser(userId));
+
+        if (userId === currentUserId) {
+          localStorage.removeItem('token');
+          navigate('/login');
+          break;
+        }
+      }
+    } catch (error) {
+      console.error("Error blocking users:", error);
+    }
   };
 
   const handleUnblockUsers = async () => {
@@ -38,10 +52,20 @@ const UserTable = () => {
   };
 
   const handleDeleteUsers = async () => {
-    selectedUsers.forEach(async (userId) => {
-      await axios.delete(getApiUrl(`/users/delete/${userId}`));
-      dispatch(deleteUser(userId));
-    });
+    try {
+      for (const userId of selectedUsers) {
+        await axios.delete(getApiUrl(`/users/delete/${userId}`));
+        dispatch(deleteUser(userId));
+
+        if (userId === currentUserId) {
+          localStorage.removeItem('token');
+          navigate('/register');
+          break;
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting users:", error);
+    }
   };
 
   return (
